@@ -1,0 +1,45 @@
+# CREST (GFN-FF) 搜索 -> MACE-OMol 单点/受约束优化 -> MACE 能量排序
+# 所有相对路径以本 YAML 文件所在目录为基准。
+# 电荷、自旋、原子编号沿用原包示例，不是自动识别值，必须按实际体系修改。
+input: ./input/
+output: ./results_sp/
+
+# CPU 并行：首个结构先用 workers=stage1_workers=1 验证。
+threads: 4
+workers: 1
+stage1_workers: 1
+
+# 体系与约束（原子从 1 编号；下列编号要求输入至少有 47 个原子）。
+chrg: 1
+uhf: 0
+freeze: [1, 35, 36, 37, 47]
+freeze_by_structure: {}
+cmetal: 0.2
+notopo: null
+hardfreeze: null
+hardfreeze_tol_A: 0.05    # 硬冻结片段内部距离允许的最大变化 (Å)；整体刚体漂移只记录不剔除
+quick: null
+crest_mdlen: null         # 采样深度: null=CREST 自动; 60=每条 MTD 60 ps; "x2.0"=默认长度×2
+fc_pos: 10.0
+
+# true = 只做 Stage1 GFN-FF 构象采样, 完全跳过 MACE (无需 model / GPU)。
+# 输出 crest_conformers.xyz、crest_ensemble.xyz、crest_best.xyz, 能量为 GFN-FF 级。
+stage1_only: false
+
+mlip:
+  model: ./models/MACE-omol.model
+  gpu_ids: [0]
+  enable_cueq: false       # 先关闭可选加速；确认 CUDA/CuEq 兼容后再启用。
+  spin: null               # null -> uhf+1；MACE-OMol 使用多重度 2S+1。
+  mode: sp                 # sp=单点；opt=ASE FIRE 受约束优化。
+  fmax: 0.04               # opt 有效，eV/Å。
+  maxsteps: 600            # opt 的步数上限，不保证收敛。
+  ewin_kcal_mol: 6.0       # 相对本结构最低 MACE 能量的输出窗口。
+  max_conformers: 500      # 先按 GFN-FF 能量取前 N 个；null=全部。
+  include_initial_ts: false
+
+resume: true              # 只续跑配置/输入/模型/脚本全部匹配的结果。
+cleanup: false            # 首次运行保留轨迹等排错文件。
+dry_run: true             # 先预检；要真实计算时改为 false。
+full_log: true
+hb: 2                     # 终端面板刷新间隔，秒；0=不定时刷新。

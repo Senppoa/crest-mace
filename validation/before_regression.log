@@ -1,0 +1,81 @@
+test_checkpoint_resume_and_retry (test_crest_mace.WorkflowTests.test_checkpoint_resume_and_retry) ... ok
+test_config_invalid_types (test_crest_mace.WorkflowTests.test_config_invalid_types) ... 
+  test_config_invalid_types (test_crest_mace.WorkflowTests.test_config_invalid_types) (changes={'mlip': []}) ... FAIL
+  test_config_invalid_types (test_crest_mace.WorkflowTests.test_config_invalid_types) (changes={'mlip': False}) ... FAIL
+test_config_normalization (test_crest_mace.WorkflowTests.test_config_normalization) ... ok
+test_deformed_hardfreeze_rejected (test_crest_mace.WorkflowTests.test_deformed_hardfreeze_rejected) ... ok
+test_input_roundtrip (test_crest_mace.WorkflowTests.test_input_roundtrip) ... ok
+test_invalid_checkpoint_payload (test_crest_mace.WorkflowTests.test_invalid_checkpoint_payload) ... ok
+test_invalid_xyz (test_crest_mace.WorkflowTests.test_invalid_xyz) ... ok
+test_manifest_stage1_ignores_unused_model (test_crest_mace.WorkflowTests.test_manifest_stage1_ignores_unused_model) ... ERROR
+test_nonfinite_gfnff_rejected (test_crest_mace.WorkflowTests.test_nonfinite_gfnff_rejected) ... FAIL
+test_rigid_rotation_preserves_geometry (test_crest_mace.WorkflowTests.test_rigid_rotation_preserves_geometry) ... ok
+test_stage1_sort_freeze_and_resume (test_crest_mace.WorkflowTests.test_stage1_sort_freeze_and_resume) ... FAIL
+test_stage2_partial_failure (test_crest_mace.WorkflowTests.test_stage2_partial_failure) ... ok
+test_stage2_sort_window_initial_and_partial_failure (test_crest_mace.WorkflowTests.test_stage2_sort_window_initial_and_partial_failure) ... FAIL
+test_worker_sp_and_constrained_fire (test_crest_mace.WorkflowTests.test_worker_sp_and_constrained_fire) ... ok
+
+======================================================================
+ERROR: test_manifest_stage1_ignores_unused_model (test_crest_mace.WorkflowTests.test_manifest_stage1_ignores_unused_model)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/test_crest_mace.py", line 97, in test_manifest_stage1_ignores_unused_model
+    cm.prepare_output(out, cfg, [self.xyz])
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/validation/crest_mace.before.py", line 316, in prepare_output
+    "model_sha256": file_sha256(cfg["mlip"]["model"]) if cfg["mlip"].get("model") else None,
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/validation/crest_mace.before.py", line 304, in file_sha256
+    with open(path, "rb") as handle:
+         ~~~~^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpp0ti9574/missing.model'
+
+======================================================================
+FAIL: test_config_invalid_types (test_crest_mace.WorkflowTests.test_config_invalid_types) (changes={'mlip': []})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/test_crest_mace.py", line 83, in test_config_invalid_types
+    with self.subTest(changes=changes), self.assertRaises(ValueError):
+                                        ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_config_invalid_types (test_crest_mace.WorkflowTests.test_config_invalid_types) (changes={'mlip': False})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/test_crest_mace.py", line 83, in test_config_invalid_types
+    with self.subTest(changes=changes), self.assertRaises(ValueError):
+                                        ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_nonfinite_gfnff_rejected (test_crest_mace.WorkflowTests.test_nonfinite_gfnff_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/test_crest_mace.py", line 133, in test_nonfinite_gfnff_rejected
+    with self.assertRaisesRegex(ValueError, 'nonfinite'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_stage1_sort_freeze_and_resume (test_crest_mace.WorkflowTests.test_stage1_sort_freeze_and_resume)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/test_crest_mace.py", line 112, in test_stage1_sort_freeze_and_resume
+    self.assertAlmostEqual(validation['max_rigid_shift_A'], np.sqrt(21), places=7)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 4.440892098500626e-16 != np.float64(4.58257569495584) within 7 places (np.float64(4.582575694955839) difference)
+
+======================================================================
+FAIL: test_stage2_sort_window_initial_and_partial_failure (test_crest_mace.WorkflowTests.test_stage2_sort_window_initial_and_partial_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/test_crest_mace.py", line 147, in test_stage2_sort_window_initial_and_partial_failure
+    self.assertEqual(cm.count_conformers(work / 'ts_ensemble.xyz'), 2)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.489s
+
+FAILED (failures=5, errors=1)

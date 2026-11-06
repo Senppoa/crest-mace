@@ -1,0 +1,149 @@
+/home/user/miniconda3/envs/mace/lib/python3.12/site-packages/e3nn/o3/_wigner.py:10: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+/home/user/miniconda3/envs/mace/lib/python3.12/site-packages/mace/calculators/mace.py:199: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  torch.load(f=model_path, map_location=device)
+WARNING:root:No dtype selected, switching to float64 to match model dtype.
+{
+  "final_sp": {
+    "n_raw": 3,
+    "n_final": 3,
+    "lowest_Eh": -2955.12432198,
+    "freeze": {
+      "atoms_1based": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "hardfreeze_1based": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "hardfreeze_tol_A": 0.05,
+      "criterion": "hardfreeze: max |d_ij - d_ij_ref| within the frozen fragment; rigid-body shift is recorded, not rejected",
+      "max_aligned_stage1_drift_A": 0.03055220520408695,
+      "max_internal_diff_A": 0.026920791465166793,
+      "max_rigid_shift_A": 0.8048416514011043,
+      "rejected_frames": [],
+      "selected_gfnff_ranks": [
+        1,
+        2,
+        3
+      ]
+    },
+    "optimization": [
+      {
+        "gfnff_rank": 1,
+        "status": "ok",
+        "steps": 0,
+        "converged": true,
+        "energy_eV": -80412.9864072096
+      },
+      {
+        "gfnff_rank": 2,
+        "status": "ok",
+        "steps": 0,
+        "converged": true,
+        "energy_eV": -80412.99518387746
+      },
+      {
+        "gfnff_rank": 3,
+        "status": "ok",
+        "steps": 0,
+        "converged": true,
+        "energy_eV": -80413.02933021849
+      }
+    ]
+  },
+  "final_opt": {
+    "n_raw": 4,
+    "n_final": 3,
+    "lowest_Eh": -2955.1415976,
+    "freeze": {
+      "atoms_1based": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "hardfreeze_1based": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "hardfreeze_tol_A": 0.05,
+      "criterion": "hardfreeze: max |d_ij - d_ij_ref| within the frozen fragment; rigid-body shift is recorded, not rejected",
+      "max_aligned_stage1_drift_A": 0.028074498901343364,
+      "max_internal_diff_A": 0.019097143291973318,
+      "max_rigid_shift_A": 0.9710641247463498,
+      "rejected_frames": [],
+      "selected_gfnff_ranks": [
+        1,
+        2,
+        3
+      ]
+    },
+    "optimization": [
+      {
+        "gfnff_rank": 1,
+        "status": "ok",
+        "steps": 5,
+        "converged": false,
+        "energy_eV": -80413.47476092594
+      },
+      {
+        "gfnff_rank": 2,
+        "status": "ok",
+        "steps": 5,
+        "converged": false,
+        "energy_eV": -80413.40623444793
+      },
+      {
+        "gfnff_rank": 3,
+        "status": "ok",
+        "steps": 5,
+        "converged": false,
+        "energy_eV": -80413.49942387143
+      }
+    ]
+  },
+  "final_stage1": {
+    "n_raw": 1,
+    "n_final": 1,
+    "lowest_Eh": -24.25680331,
+    "freeze": {
+      "atoms_1based": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "hardfreeze_1based": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "hardfreeze_tol_A": 0.05,
+      "criterion": "hardfreeze: max |d_ij - d_ij_ref| within the frozen fragment; rigid-body shift is recorded, not rejected",
+      "max_aligned_stage1_drift_A": 0.017719901223388845,
+      "max_internal_diff_A": 0.01440260772963331,
+      "max_rigid_shift_A": 0.7565031855196498,
+      "rejected_frames": [],
+      "selected_gfnff_ranks": [
+        1
+      ]
+    }
+  },
+  "two_gpu_independent_errors_eV": [
+    0.0,
+    0.0
+  ],
+  "recomputed_output_errors_eV": {
+    "final_sp": 8.472125045955181e-08,
+    "final_opt": 9.968061931431293e-09
+  }
+}

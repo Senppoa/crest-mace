@@ -1,0 +1,4 @@
+PASS: README local links, portable YAML paths, unchanged core script and input
+PASS: example Stage1 dry-run creates no runs directory
+PASS: repository copied to a temporary unrelated directory
+PASS: archived SP, opt and Stage1 outputs, frozen coordinates, energy ordering, window, original input, manifests and resume logs

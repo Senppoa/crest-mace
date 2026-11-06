@@ -1,0 +1,12 @@
+STAGE2_MLIP_DONE
+model: /media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/Negishi/model/MACE-omol-0-extra-large-1024.model
+mode: opt  fmax: 0.04  maxsteps: 5
+gpus: [0]
+input_conformers: 3  ok: 3  error: 0
+selected (ewin 6.0 kcal/mol): 3
+wall_time_s: 20.9
+
+rank   idx           E_eV      E_Hartree   rel_kcal  nsteps
+   0     2  -80413.499424 -2955.14159760     0.0000       5
+   1     0  -80413.474761 -2955.14069125     0.5687       5
+   2     1  -80413.406234 -2955.13817295     2.1490       5

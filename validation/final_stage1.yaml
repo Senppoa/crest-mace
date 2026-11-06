@@ -1,0 +1,28 @@
+chrg: 0
+cmetal: 0
+crest_mdlen: 1
+freeze:
+- 1
+- 2
+- 3
+- 5
+full_log: true
+hardfreeze:
+- 1
+- 2
+- 3
+- 5
+hb: 0
+input: /media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/input
+mlip:
+  gpu_ids: []
+  max_conformers: null
+  model: unused_missing.model
+output: /media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/validation/final_stage1
+quick: mquick
+resume: true
+stage1_only: true
+stage1_workers: 1
+threads: 4
+uhf: 0
+workers: 1

@@ -1,0 +1,159 @@
+--- validation/crest_mace.before.py	2026-11-05 17:45:33.529771927 +0800
++++ crest_mace.py	2026-11-05 17:51:20.139783785 +0800
+@@ -33,6 +33,10 @@
+ EV_TO_HARTREE = 1.0 / 27.211386245988
+ EV_TO_KCAL = 23.060549
+ HARTREE_TO_KCAL = 627.5094740631
++ELEMENTS = set(('H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn '
++                'Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce '
++                'Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn '
++                'Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Db Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og').split())
+ 
+ SAMPLE_CONFIG = """\
+ # CREST (GFN-FF) 搜索 -> MACE-OMol 单点/受约束优化 -> MACE 能量排序
+@@ -205,7 +209,9 @@
+     if isinstance(fc_pos, bool) or not isinstance(fc_pos, (int, float)) or not math.isfinite(fc_pos) or fc_pos <= 0:
+         raise ValueError("fc_pos must be a finite positive number")
+     defaults["fc_pos"] = float(fc_pos)
+-    mlip = defaults.get("mlip") or {}
++    mlip = defaults.get("mlip")
++    if mlip is None:
++        mlip = {}
+     allowed_mlip = {"model", "gpu_ids", "enable_cueq", "mode", "spin", "fmax", "maxsteps",
+                     "ewin_kcal_mol", "max_conformers", "include_initial_ts"}
+     if not isinstance(mlip, dict):
+@@ -313,7 +319,8 @@
+     identity = {
+         "config": cfg,
+         "script_sha256": file_sha256(__file__),
+-        "model_sha256": file_sha256(cfg["mlip"]["model"]) if cfg["mlip"].get("model") else None,
++        "model_sha256": (file_sha256(cfg["mlip"]["model"])
++                         if not cfg["stage1_only"] and cfg["mlip"].get("model") else None),
+         "inputs_sha256": {path.name: file_sha256(path) for path in xyzs},
+     }
+     manifest = out / "crest_mlip_manifest.json"
+@@ -385,6 +392,8 @@
+             try:
+                 if len(parts) < 4 or not re.fullmatch(r"[A-Za-z]{1,2}", parts[0]):
+                     raise ValueError("invalid atom row")
++                if parts[0].capitalize() not in ELEMENTS:
++                    raise ValueError("unknown element")
+                 coords = [float(value) for value in parts[1:4]]
+                 if not all(math.isfinite(value) for value in coords):
+                     raise ValueError("nonfinite coordinates")
+@@ -638,6 +647,16 @@
+     return pools, result_queue
+ 
+ 
++def wait_gpu_result(result_queue, workers):
++    """A native/CUDA worker crash must not leave the parent waiting forever."""
++    while True:
++        try:
++            return result_queue.get(timeout=1.0)
++        except queue.Empty:
++            if any(worker.exitcode is not None for worker in workers):
++                raise RuntimeError("Stage2 GPU worker exited before returning a result")
++
++
+ def run_mlip_stage2(frames, mlip_cfg, gpu_pools, result_queue, stage2_lock,
+                     event_q, wid, name):
+     """对一批构象跑 MACE SP/opt, 多 GPU 轮询分配, 返回 [(idx, status, energy_ev, pos, nsteps)]."""
+@@ -672,12 +691,13 @@
+                if result is None or result[0] != "ok"}
+     report_step = max(1, n_conf // 10)
+     with stage2_lock:  # 串行化 Stage 2, 单结构独占全部 GPU
++        workers = [worker for pool in gpu_pools for worker in getattr(pool, "_pool", [])]
+         for i, task in enumerate(tasks):
+             if results[i] is not None and results[i][0] == "ok":
+                 continue
+             gpu_pools[i % n_gpu].apply_async(_compute_conformer, (task,))
+         while done < n_conf:
+-            idx, payload = result_queue.get()
++            idx, payload = wait_gpu_result(result_queue, workers)
+             if type(idx) is not int or idx not in pending:
+                 raise ValueError(f"Stage2 returned an unexpected conformer index: {idx}")
+             validate_stage2_result(payload, frames[idx][0])
+@@ -700,7 +720,7 @@
+                 initial_result = None
+             if initial_result is None or initial_result[0] != "ok":
+                 gpu_pools[0].apply_async(_compute_conformer, ((0, initial_syms, initial_pos, "sp", fmax, maxsteps, []),))
+-                initial_idx, initial_result = result_queue.get()
++                initial_idx, initial_result = wait_gpu_result(result_queue, workers)
+                 if type(initial_idx) is not int or initial_idx != 0:
+                     raise ValueError("Unexpected initial TS result index")
+                 validate_stage2_result(initial_result, initial_syms)
+@@ -740,9 +760,11 @@
+             txt = s2_log.read_text(errors="ignore")
+         except Exception:
+             return False
+-        if mlip_cfg.get("include_initial_ts") and not (work / "ts_ensemble.xyz").exists():
++        if (not mlip_cfg.get("stage1_only") and mlip_cfg.get("include_initial_ts")
++                and not (work / "ts_ensemble.xyz").exists()):
+             return False
+-        return ("STAGE2_MLIP_DONE" in txt and "ERROR" not in txt
++        marker = "STAGE1_ONLY_DONE" if mlip_cfg.get("stage1_only") else "STAGE2_MLIP_DONE"
++        return (marker in txt and "ERROR" not in txt
+                 and count_conformers(ensemble) > 0)
+ 
+     s1_backup = work / "crest_conformers_gfnff.xyz"
+@@ -750,7 +772,8 @@
+     if resume and stage2_ok():
+         e = read_lowest_energy(work / "crest_best.xyz")
+         n_fin = count_conformers(ensemble)
+-        event_q.put(f"[W{wid}] SKIP {name} (Stage2 已完成, E={e:.5f}, {n_fin} 构象)")
++        completed_stage = "Stage1 仅采样" if mlip_cfg.get("stage1_only") else "Stage2"
++        event_q.put(f"[W{wid}] SKIP {name} ({completed_stage} 已完成, E={e:.5f}, {n_fin} 构象)")
+         with status_lock:
+             status.pop(wid, None)
+         return {"name": name, "status": "skipped", "lowest_energy": e,
+@@ -869,7 +892,10 @@
+             cursor += 1
+             continue
+         nat = int(raw[cursor])
+-        energies.append(float(raw[cursor + 1].split()[0]))
++        energy = float(raw[cursor + 1].split()[0])
++        if not math.isfinite(energy):
++            raise ValueError("Stage1 contains a nonfinite GFN-FF energy")
++        energies.append(energy)
+         cursor += nat + 2
+     order = sorted(range(len(frames)), key=energies.__getitem__)
+     frames = [frames[i] for i in order]
+@@ -905,6 +931,9 @@
+         if syms != reference_syms:
+             raise ValueError("Stage1 atom order differs from initial TS")
+         arr = np.asarray(pos)
++        rigid_shift = float(np.linalg.norm(
++            arr[hard_idx].mean(axis=0) - reference[hard_idx].mean(axis=0))) if hard_freeze else 0.0
++        max_rigid_shift = max(max_rigid_shift, rigid_shift)
+         center_a = arr[anchor_idx].mean(axis=0)
+         center_b = reference[anchor_idx].mean(axis=0)
+         u, _, vt = np.linalg.svd((arr[anchor_idx] - center_a).T @ (reference[anchor_idx] - center_b))
+@@ -913,9 +942,6 @@
+         arr = (arr - center_a) @ (u @ correction @ vt) + center_b
+         drift = float(np.linalg.norm(arr[frozen_idx] - reference[frozen_idx], axis=1).max())
+         max_drift = max(max_drift, drift)
+-        rigid_shift = float(np.linalg.norm(
+-            arr[hard_idx].mean(axis=0) - reference[hard_idx].mean(axis=0))) if hard_freeze else 0.0
+-        max_rigid_shift = max(max_rigid_shift, rigid_shift)
+         internal = 0.0
+         if hard_freeze:
+             internal = max((abs(float(np.linalg.norm(arr[i] - arr[j])) - reference_dists[(i, j)])
+@@ -1038,6 +1064,8 @@
+         target = work / "ts_ensemble.xyz"
+         original_lines = Path(xyz_path).read_text().splitlines(keepends=True)
+         original_lines[1] = f"{initial_eh:.12f} source=initial_true_TS name={name}\n"
++        if not original_lines[-1].endswith("\n"):
++            original_lines[-1] += "\n"
+         target.write_text("".join(original_lines) + ensemble.read_text())
+         shutil.copyfile(xyz_path, work / "initial_true_ts.xyz")
+     (work / "optimization_status.json").write_text(json.dumps([
+@@ -1327,7 +1355,8 @@
+     ui.print_line(f"完成: {len(ok)} 成功, {len(err)} 失败, {len(sk)} 跳过, "
+                   f"{len(dr)} dry-run, 共 {len(results)}")
+     if ok:
+-        ui.print_line("最低能量构象 (MACE 级, 按能量升序):")
++        level = "GFN-FF 级" if cfg["stage1_only"] else "MACE 级"
++        ui.print_line(f"最低能量构象 ({level}, 按能量升序):")
+         for r in sorted(ok, key=lambda x: x["lowest_energy"]):
+             ui.print_line(f"  {r['name']:20s}  {r['lowest_energy']:.5f} Eh  "
+                           f"({r['n_final']} 构象)  -> {r['work']}/crest_best.xyz")

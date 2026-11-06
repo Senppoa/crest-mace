@@ -1,0 +1,25 @@
+{
+  "atoms_1based": [
+    1,
+    2,
+    3,
+    5
+  ],
+  "hardfreeze_1based": [
+    1,
+    2,
+    3,
+    5
+  ],
+  "hardfreeze_tol_A": 0.05,
+  "criterion": "hardfreeze: max |d_ij - d_ij_ref| within the frozen fragment; rigid-body shift is recorded, not rejected",
+  "max_aligned_stage1_drift_A": 0.0215438598092918,
+  "max_internal_diff_A": 0.018599493176534976,
+  "max_rigid_shift_A": 1.0065802505101917,
+  "rejected_frames": [],
+  "selected_gfnff_ranks": [
+    1,
+    2,
+    3
+  ]
+}

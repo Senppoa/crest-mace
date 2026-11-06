@@ -1,0 +1,359 @@
+
+       ╔════════════════════════════════════════════╗
+       ║            ___ ___ ___ ___ _____           ║
+       ║           / __| _ \ __/ __|_   _|          ║
+       ║          | (__|   / _|\__ \ | |            ║
+       ║           \___|_|_\___|___/ |_|            ║
+       ║                                            ║
+       ║  Conformer-Rotamer Ensemble Sampling Tool  ║
+       ║          based on the xTB methods          ║
+       ║                                            ║
+       ╚════════════════════════════════════════════╝
+       Version 3.0.2, Tue, 05 August 16:25:20, 08/05/2025
+       commit (6914a25) compiled by 'usr@b54ea9d7c43e'
+
+   Cite work conducted with this code as
+
+   • P.Pracht, F.Bohle, S.Grimme, PCCP, 2020, 22, 7169-7192.
+   • S.Grimme, JCTC, 2019, 15, 2847-2862.
+   • P.Pracht, S.Grimme, C.Bannwarth, F.Bohle, S.Ehlert,
+     G.Feldmann, J.Gorges, M.Müller, T.Neudecker, C.Plett,
+     S.Spicher, P.Steinbach, P.Wesołowski, F.Zeller,
+     J. Chem. Phys., 2024, 160, 114110.
+
+   for works involving QCG cite
+
+   • S.Spicher, C.Plett, P.Pracht, A.Hansen, S.Grimme,
+     JCTC, 2022, 18 (5), 3174-3189.
+   • C.Plett, S. Grimme,
+     Angew. Chem. Int. Ed. 2023, 62, e202214477.
+
+   for works involving MECP screening cite
+
+   • P.Pracht, C.Bannwarth, JCTC, 2022, 18 (10), 6370-6385.
+
+   Original code
+     P.Pracht, S.Grimme, Universität Bonn, MCTC
+   with help from (alphabetical order):
+     C.Bannwarth, F.Bohle, S.Ehlert, G.Feldmann, J.Gorges,
+     S.Grimme, C.Plett, P.Pracht, S.Spicher, P.Steinbach,
+     P.Wesolowski, F.Zeller
+
+   Online documentation is available at
+   https://crest-lab.github.io/crest-docs/
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   GNU Lesser General Public License (LGPL) for more details.
+
+ Command line input:
+ $ crest sampling.toml --v3 --gfnff --chrg 0 --uhf 0 --cmetal 0 --subrmsd --noreftopo --T 4 --mquick --len 0.1
+
+ reading sampling.toml
+********************************************************************************
+* INPUT FILE sampling.toml content (without comments):
+********************************************************************************
+* input = "struc.xyz"
+* runtype = "imtd-gc"
+* threads = 4
+* constraints = "constraints.inp"
+* [calculation]
+* freeze = "1,2,3,5"
+* [[calculation.level]]
+* method = "gfnff"
+* chrg = 0
+* uhf = 0
+********************************************************************************
+  --v3 : iMTD-GC
+  --gfnff : Use of GFN-FF requested.
+  --chrg 0
+  --uhf 0
+  --T 4 (CPUs/Threads selected)
+  --mquick  : very crude quick-mode (no NORMMD, no GC, crude opt.)
+  --len 0.1 (MD length in ps)
+
+ <constraints.inp> file present.
+ content of the constraining file (sorted):
+> $constrain
+>   atoms: 1-3,5
+>   force constant=10
+>   reference=coord.ref
+> $metadyn
+>   atoms: 4,6-132
+Parsing xtb-type input file constraints.inp to set up calculators ...
+ fix file: coord.ref
+  atoms: 4,6-132
+     # of atoms considered for RMSDs:128
+Parsing xtb-type input file bondlengths to set up calculators ...
+
+--------------------------------------------------
+ FROZEN ATOMS:
+ 1 2 3 5
+--------------------------------------------------
+
+          ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+          │              CREST iMTD-GC SAMPLING             │
+          ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+
+ Input structure:
+  132
+
+ Rh         2.2469360708        1.3317442030        0.2473089316
+ H          1.0673919463        2.2814657062        0.5846289205
+ C          3.3833175947        2.9807265815        0.6068628881
+ H          3.9648307953        3.2185031881       -0.2884493886
+ C          2.0616257996        3.4387972556        0.6029250828
+ H          1.6692544317        3.7531515632        1.5742522310
+ C          1.5250932416        4.2964889394       -0.5300924501
+ H          1.8973313230        3.8967225860       -1.4777195305
+ H          1.9447198140        5.3055974120       -0.4297673771
+ C          4.2110678504        2.9818337891        1.8758255820
+ H          3.5943194306        2.7320745363        2.7420357021
+ H          5.0155196171        2.2430710000        1.8270374008
+ H          4.6763493355        3.9567884283        2.0630333034
+ C          0.0060016224        4.3938994938       -0.5744249019
+ H         -0.3496974490        4.9355392118        0.3107369118
+ H         -0.4167473207        3.3856457346       -0.5190386385
+ C         -0.5147146381        5.0733291439       -1.8335712265
+ H         -0.1171597891        6.0929810541       -1.9010768865
+ H         -0.1268325522        4.5373078319       -2.7082904789
+ C         -2.0354355000        5.1094764077       -1.9111430343
+ H         -2.4216969989        4.0896352545       -1.8175834987
+ H         -2.4292129487        5.6640511408       -1.0526966200
+ C         -2.5451741419        5.7334503107       -3.2032467861
+ H         -2.1924091914        5.1713480512       -4.0713576371
+ H         -3.6353784113        5.7486694728       -3.2397519633
+ H         -2.1906901713        6.7611538525       -3.3115840596
+ C          3.1975933912       -0.4185511928        3.6151868772
+ C          3.9588903133       -1.1658122923        4.5039100657
+ C          5.1094761843       -1.7475506598        3.9866672839
+ C          5.4427406182       -1.5543092093        2.6605996013
+ C          4.6100332925       -0.7781860894        1.8513419275
+ N          3.4996515247       -0.2340350003        2.3364212737
+ H          5.7478863992       -2.3512608574        4.6215233894
+ H          2.2861531977        0.0593570438        3.9628535437
+ H          6.3421950135       -2.0100578083        2.2761868996
+ C          4.9270597186       -0.5222388258        0.4126698129
+ C          6.0842593152       -1.0490043957       -0.1657772184
+ C          4.3997074764        0.4807951286       -1.5885333949
+ C          6.3746559373       -0.8035089939       -1.4893922944
+ H          6.7588632208       -1.6586014041        0.4143099889
+ C          5.5142327663       -0.0123257188       -2.2419430582
+ H          3.6931476010        1.1144532908       -2.1116619603
+ H          7.2678751051       -1.2228335390       -1.9376070355
+ C          5.7645886955        0.2950757580       -3.6894361016
+ H          6.7213159771        0.8023303362       -3.8227721869
+ H          5.7912101204       -0.6206472286       -4.2825697134
+ H          4.9817282604        0.9356907658       -4.0933203930
+ C          3.5527972477       -1.3270284711        5.9397299345
+ H          4.2690416220       -0.8431356081        6.6060597804
+ H          2.5737756210       -0.8841485422        6.1199010561
+ H          3.5049830582       -2.3807614137        6.2184416653
+ N          4.0897236750        0.2319838339       -0.3084397762
+ C          2.5542355492       -3.8095438651       -2.2784966292
+ C          3.1203804119       -3.1663116084       -1.0208002436
+ C          1.9811064047       -2.5342608418       -0.2194380253
+ C          0.9756000409       -1.7570921446       -1.1071152066
+ C          1.5534658697       -1.4651067123       -2.4981491390
+ C          2.0611731611       -2.7174393185       -3.2338286138
+ P          0.5694083448       -0.1405445155       -0.2680325357
+ C         -0.5935231241        0.5790988859       -1.5013035779
+ C         -0.1979723291        1.5202093543       -2.4280415207
+ C         -1.3163012284        1.7462849941       -3.2462152664
+ N         -2.3483155529        1.0161840071       -2.8641867823
+ N         -1.9005224989        0.2986445208       -1.8108821842
+ C         -2.8386076605       -0.5022597220       -1.1261848689
+ C         -3.0495860985       -1.8924411510       -1.2222545999
+ N         -4.0405727436       -2.2582221823       -0.4260587469
+ N         -4.4789059377       -1.1271228353        0.1623417359
+ C         -3.7872845304       -0.0310228268       -0.2446538910
+ C         -4.0745728353        1.3555536477        0.1577544716
+ C         -3.0444256706        2.1784791780        0.6051781307
+ C         -3.3124722203        3.4835036572        0.9910881022
+ C         -4.6054941255        3.9787888917        0.9213091706
+ C         -5.6319725799        3.1685906986        0.4529387826
+ C         -5.3691897387        1.8638856896        0.0712621682
+ C         -5.5457883275       -1.2236482929        1.1016008334
+ C         -5.5271180465       -0.4798161513        2.2724594653
+ C         -6.5761468590       -0.6014986340        3.1707612207
+ C         -7.6258103048       -1.4702793342        2.9102462778
+ C         -7.6251742734       -2.2210705967        1.7428047994
+ C         -6.5881328641       -2.0988631313        0.8318568366
+ C         -2.3556386356       -2.8786455363       -2.0634758604
+ C         -1.9517220150       -2.5399160301       -3.3530114455
+ C         -1.3229153031       -3.4836992471       -4.1510032363
+ C         -1.0800834484       -4.7613539906       -3.6657810842
+ C         -1.4774999101       -5.0990347516       -2.3788604691
+ C         -2.1177583747       -4.1634979171       -1.5814295130
+ C         -0.5487063957       -0.5867080008        1.1725135314
+ C         -0.1382642486        0.2193330466        2.4240502083
+ C         -0.6070126262       -0.4476935953        3.7231091282
+ C         -1.9643926827       -1.1054470925        3.5050906215
+ C         -1.8301032822       -2.2774071390        2.5194559700
+ C         -0.6677807496       -2.0695142610        1.5344342589
+ H          1.7199935802       -4.4614862383       -1.9958841218
+ H          3.2935056883       -4.4422393257       -2.7745072798
+ H          3.6444818432       -3.8950498655       -0.3969721164
+ H          3.8578344686       -2.4092153230       -1.3067616028
+ H          2.3878634293       -1.8772701721        0.5561429975
+ H          1.4474456769       -3.3349750502        0.2974991896
+ H          0.0660229161       -2.3488101647       -1.2373221533
+ H          2.3697061817       -0.7490042466       -2.3831723949
+ H          0.8019665396       -0.9653259924       -3.1109295636
+ H          1.2749891696       -3.1175796163       -3.8739377089
+ H          2.8798509458       -2.4184690762       -3.8959818053
+ H          0.7788466075        1.9738326978       -2.4631151205
+ H         -1.4213841632        2.4157668857       -4.0859992289
+ H         -2.0296274344        1.8027619638        0.6506272741
+ H         -2.5030302945        4.1139606575        1.3354705921
+ H         -4.8129151369        4.9984981599        1.2198310162
+ H         -6.6400644163        3.5557860842        0.3810764648
+ H         -6.1687129663        1.2332571257       -0.2972302780
+ H         -4.7037274392        0.1887516165        2.4794702562
+ H         -6.5640679810       -0.0197578400        4.0831129892
+ H         -8.4396611634       -1.5655072922        3.6168625146
+ H         -8.4387152623       -2.9038424870        1.5355751073
+ H         -6.5673549980       -2.6776719746       -0.0806291869
+ H         -2.1485501638       -1.5449598764       -3.7335545338
+ H         -1.0207998596       -3.2189132712       -5.1564826920
+ H         -0.5811487760       -5.4927359948       -4.2890496994
+ H         -1.2897695255       -6.0944485553       -1.9967138715
+ H         -2.4397983462       -4.4167927416       -0.5791054692
+ H         -1.5494163736       -0.2713831152        0.8795279914
+ H         -0.5646906122        1.2253240212        2.3580108600
+ H          0.9434947783        0.3639885114        2.4118520840
+ H          0.1134423295       -1.2101824370        4.0407476385
+ H         -0.6507738667        0.2920606727        4.5260662296
+ H         -2.6451225877       -0.3499158412        3.0991613853
+ H         -2.4054467119       -1.4449386072        4.4442595812
+ H         -1.6682643889       -3.2076455730        3.0707645665
+ H         -2.7614118755       -2.4060834078        1.9614830478
+ H         -0.8307118579       -2.6870253798        0.6497166813
+ H          0.2695142606       -2.4062956657        1.9847409979
+
+ ------------------------------------------------
+ Generating MTD length from a flexibility measure
+ ------------------------------------------------
+ Calculating GFN0-xTB WBOs   ... done.
+ Calculating NCI flexibility ... done.
+     covalent flexibility measure :   0.230
+ non-covalent flexibility measure :   0.557
+ flexibility measure :   0.249
+ t(MTD) / ps set by command line  :     0.1
+ t(MTD) / ps    :     0.1
+ Σ(t(MTD)) / ps :     0.6 (6 MTDs)
+
+ -----------------------------------
+ Starting trial MTD to test settings
+ -----------------------------------
+ Trial MTD 1 runtime (1.0 ps) ...        0 min,  2.223 sec
+ Estimated runtime for one MTD (0.1 ps) on a single thread: 0 sec
+ Estimated runtime for a batch of 6 MTDs on 4 threads: 0 sec
+
+******************************************************************************************
+**                         N E W   I T E R A T I O N  C Y C L E                         **
+******************************************************************************************
+
+ ------------------------------
+ Meta-Dynamics Iteration 1
+ ------------------------------
+ init_shake: metal bond            1           2 not constrained
+ init_shake: metal bond            1           3 not constrained
+ init_shake: metal bond            1           5 not constrained
+ init_shake: metal bond            1          52 not constrained
+ init_shake: metal bond            1          59 not constrained
+ list of applied metadynamics Vbias parameters:
+$metadyn    0.25600   1.000
+$metadyn    0.12800   1.000
+$metadyn    0.25600   0.500
+$metadyn    0.12800   0.500
+$metadyn    0.25600   0.250
+$metadyn    0.12800   0.250
+
+  ::::::::::::: starting MTD    1 :::::::::::::
+  |   MD simulation time   :     0.1 ps       |
+  |   target T             :   300.0 K        |
+  |   timestep dt          :     1.5 fs       |
+  |   dump interval(trj)   :   100.0 fs       |
+  |   SHAKE algorithm      : true (all bonds) |
+  |   dump interval(Vbias) :    1.00 ps       |
+  |   Vbias prefactor (k)  :  0.2560 Eh       |
+  |   Vbias exponent (α)   :  1.0000 bohr⁻²   |
+  ::::::::::::: starting MTD    6 :::::::::::::
+  |   MD simulation time   :     0.1 ps       |
+  |   target T             :   300.0 K        |
+  |   timestep dt          :     1.5 fs       |
+  |   dump interval(trj)   :   100.0 fs       |
+  |   SHAKE algorithm      : true (all bonds) |
+  |   dump interval(Vbias) :    1.00 ps       |
+  |   Vbias prefactor (k)  :  0.1280 Eh       |
+  |   Vbias exponent (α)   :  0.2500 bohr⁻²   |
+  ::::::::::::: starting MTD    5 :::::::::::::
+  |   MD simulation time   :     0.1 ps       |
+  |   target T             :   300.0 K        |
+  |   timestep dt          :     1.5 fs       |
+  |   dump interval(trj)   :   100.0 fs       |
+  |   SHAKE algorithm      : true (all bonds) |
+  |   dump interval(Vbias) :    1.00 ps       |
+  |   Vbias prefactor (k)  :  0.2560 Eh       |
+  |   Vbias exponent (α)   :  0.2500 bohr⁻²   |
+  ::::::::::::: starting MTD    3 :::::::::::::
+  |   MD simulation time   :     0.1 ps       |
+  |   target T             :   300.0 K        |
+  |   timestep dt          :     1.5 fs       |
+  |   dump interval(trj)   :   100.0 fs       |
+  |   SHAKE algorithm      : true (all bonds) |
+  |   dump interval(Vbias) :    1.00 ps       |
+  |   Vbias prefactor (k)  :  0.2560 Eh       |
+  |   Vbias exponent (α)   :  0.5000 bohr⁻²   |
+*MTD   1 completed successfully ...        0 min,  0.190 sec
+  ::::::::::::: starting MTD    2 :::::::::::::
+  |   MD simulation time   :     0.1 ps       |
+  |   target T             :   300.0 K        |
+  |   timestep dt          :     1.5 fs       |
+  |   dump interval(trj)   :   100.0 fs       |
+  |   SHAKE algorithm      : true (all bonds) |
+  |   dump interval(Vbias) :    1.00 ps       |
+  |   Vbias prefactor (k)  :  0.1280 Eh       |
+  |   Vbias exponent (α)   :  1.0000 bohr⁻²   |
+*MTD   5 completed successfully ...        0 min,  0.210 sec
+*MTD   3 completed successfully ...        0 min,  0.229 sec
+  ::::::::::::: starting MTD    4 :::::::::::::
+  |   MD simulation time   :     0.1 ps       |
+  |   target T             :   300.0 K        |
+  |   timestep dt          :     1.5 fs       |
+  |   dump interval(trj)   :   100.0 fs       |
+  |   SHAKE algorithm      : true (all bonds) |
+  |   dump interval(Vbias) :    1.00 ps       |
+  |   Vbias prefactor (k)  :  0.1280 Eh       |
+  |   Vbias exponent (α)   :  0.5000 bohr⁻²   |
+*MTD   6 completed successfully ...        0 min,  0.282 sec
+*MTD   2 completed successfully ...        0 min,  0.194 sec
+*MTD   4 completed successfully ...        0 min,  0.203 sec
+
+ ======================================
+ |  Multilevel Ensemble Optimization  |
+ ======================================
+ empty ensemble file crest_dynamics.trj
+
+========================================
+           MTD Simulations done         
+========================================
+ Collecting ensmbles.
+ERROR STOP 
+
+Error termination. Backtrace:
+#0  0x5b1703f729b7 in cregen_files_
+	at /usr/local/src/conda/crest-3.0.2/src/cregen.f90:394
+#1  0x5b1703f72abf in newcregen_
+	at /usr/local/src/conda/crest-3.0.2/src/cregen.f90:306
+#2  0x5b1703ce8c7f in crest_search_imtdgc_
+	at /usr/local/src/conda/crest-3.0.2/src/algos/search_conformers.f90:178
+#3  0x5b1703f94c35 in confscript2i_
+	at /usr/local/src/conda/crest-3.0.2/src/legacy_wrappers.f90:148
+#4  0x5b1703bd9e53 in crest
+	at /usr/local/src/conda/crest-3.0.2/src/crest_main.f90:240
+#5  0x5b1703bd82b0 in main
+	at /usr/local/src/conda/crest-3.0.2/src/crest_main.f90:26
+ Warning, file crest_rotamers_0.xyz does not exist!

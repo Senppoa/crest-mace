@@ -1,0 +1,5 @@
+STAGE1_ONLY_DONE
+Stage2 已按 stage1_only 关闭；能量为 GFN-FF 级 (Hartree)。
+input_conformers: 1
+selected: 1
+hardfreeze_tol_A: 0.05  max_internal_diff_A: 0.0144026

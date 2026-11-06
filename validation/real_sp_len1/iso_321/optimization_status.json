@@ -1,0 +1,23 @@
+[
+  {
+    "gfnff_rank": 1,
+    "status": "ok",
+    "steps": 0,
+    "converged": true,
+    "energy_eV": -80413.01562998499
+  },
+  {
+    "gfnff_rank": 2,
+    "status": "ok",
+    "steps": 0,
+    "converged": true,
+    "energy_eV": -80412.94286327524
+  },
+  {
+    "gfnff_rank": 3,
+    "status": "ok",
+    "steps": 0,
+    "converged": true,
+    "energy_eV": -80413.022669892
+  }
+]

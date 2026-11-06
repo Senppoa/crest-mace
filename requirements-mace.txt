@@ -1,0 +1,3 @@
+# Install a CUDA-compatible PyTorch first; see README.
+-r requirements.txt
+mace-torch==0.3.15

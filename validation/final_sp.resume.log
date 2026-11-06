@@ -1,0 +1,23 @@
+[17:51:42] ========================================================================
+[17:51:42] 批量两阶段构象搜索 (GFN-FF -> MACE-omol MLIP)
+[17:51:42]   配置:   validation/final_sp.yaml
+[17:51:42]   输入:   /media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/input  (1 个结构)
+[17:51:42]   输出:   /media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/validation/final_sp
+[17:51:42]   Stage1: threads=4  stage1_workers=1  pipeline_workers=1
+[17:51:42]   Stage2: model=MACE-omol-0-extra-large-1024.model  charge=0  spin(多重度)=1
+[17:51:42]           gpus=[0, 1]  cueq=False  mode=sp  fmax=0.04  maxsteps=600  ewin=6.0 kcal/mol
+[17:51:42]   电荷: 0  UHF: 0  冻结原子: [1, 2, 3, 5]  cmetal: 0
+[17:51:42]   Stage1 额外: notopo=None  hardfreeze=[1, 2, 3, 5]  fc_pos=10.0  quick=--mquick  hardfreeze_tol=0.05 Å
+[17:51:42]   采样深度: crest_mdlen=1
+[17:51:42]   Stage1 冻结: 硬冻结 [1, 2, 3, 5]（梯度清零）；校验冻结片段内部形变 < 0.05 Å，整体漂移只记录并在坐标写回时消除
+[17:51:42]   resume=True  cleanup=False  dry_run=False
+[17:51:42] ========================================================================
+[17:51:42] 创建 2 个 GPU 进程 (MACE 将在首次 Stage2 时懒加载, Stage1 期间不占显存)
+[17:51:42]   GPU 进程就绪 (0s, 模型未加载)
+[17:51:42] [W1] SKIP iso_321 (Stage2 已完成, E=-2955.12432, 3 构象)
+[17:51:42] ========================================================================
+[17:51:42] 完成: 0 成功, 0 失败, 1 跳过, 0 dry-run, 共 1
+[17:51:42] ========================================================================
+
+主日志: /media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/validation/final_sp/batch_run.log
+汇总CSV: /media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/validation/final_sp/batch_summary.csv

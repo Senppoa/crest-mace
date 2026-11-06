@@ -1,0 +1,40 @@
+[17:51:43] ========================================================================
+[17:51:43] 批量两阶段构象搜索 (GFN-FF -> MACE-omol MLIP)
+[17:51:43]   配置:   validation/final_opt.yaml
+[17:51:43]   输入:   /media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/input  (1 个结构)
+[17:51:43]   输出:   /media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/validation/final_opt
+[17:51:43]   Stage1: threads=4  stage1_workers=1  pipeline_workers=1
+[17:51:43]   Stage2: model=MACE-omol-0-extra-large-1024.model  charge=0  spin(多重度)=1
+[17:51:43]           gpus=[0]  cueq=False  mode=opt  fmax=0.04  maxsteps=5  ewin=6.0 kcal/mol
+[17:51:43]   电荷: 0  UHF: 0  冻结原子: [1, 2, 3, 5]  cmetal: 0
+[17:51:43]   Stage1 额外: notopo=None  hardfreeze=[1, 2, 3, 5]  fc_pos=10.0  quick=--mquick  hardfreeze_tol=0.05 Å
+[17:51:43]   采样深度: crest_mdlen=1
+[17:51:43]   Stage1 冻结: 硬冻结 [1, 2, 3, 5]（梯度清零）；校验冻结片段内部形变 < 0.05 Å，整体漂移只记录并在坐标写回时消除
+[17:51:43]   resume=True  cleanup=False  dry_run=False
+[17:51:43] ========================================================================
+[17:51:43] 创建 1 个 GPU 进程 (MACE 将在首次 Stage2 时懒加载, Stage1 期间不占显存)
+[17:51:43]   GPU 进程就绪 (0s, 模型未加载)
+[17:51:43] [W1] iso_321: gen_const
+[17:51:43] [W1] iso_321: position force constant=10
+[17:51:43] [W1] iso_321: Stage1 GFN-FF
+[17:51:54] [W1] iso_321: Stage1 完成 -> 4 个 GFN-FF 构象
+[17:51:54] [W1] iso_321: Stage2 MACE(opt)
+[17:51:54] [W1] iso_321: 冻结片段内部形变≤1.9e-02 Å，整体漂移≤0.971 Å (整体漂移已由坐标写回消除)
+[17:51:54] [W1] iso_321: 取冻结核验合格且 GFN-FF 能量最低的 3/4 个构象
+/home/user/miniconda3/envs/mace/lib/python3.12/site-packages/e3nn/o3/_wigner.py:10: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+/home/user/miniconda3/envs/mace/lib/python3.12/site-packages/mace/calculators/mace.py:199: UserWarning: Environment variable TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD detected, since the`weights_only` argument was not explicitly passed to `torch.load`, forcing weights_only=False.
+  torch.load(f=model_path, map_location=device)
+WARNING:root:No dtype selected, switching to float64 to match model dtype.
+[17:52:06] [W1] iso_321: Stage2 MACE 1/3
+[17:52:10] [W1] iso_321: Stage2 MACE 2/3
+[17:52:14] [W1] iso_321: Stage2 MACE 3/3
+[17:52:15] [W1] DONE iso_321: 最低=-2955.14160 Eh, 3 个 MLP 构象 (opt, 21s, 0 错误)
+[17:52:16] ========================================================================
+[17:52:16] 完成: 1 成功, 0 失败, 0 跳过, 0 dry-run, 共 1
+[17:52:16] 最低能量构象 (MACE 级, 按能量升序):
+[17:52:16]   iso_321               -2955.14160 Eh  (3 构象)  -> /media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/validation/final_opt/iso_321/crest_best.xyz
+[17:52:16] ========================================================================
+
+主日志: /media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/validation/final_opt/batch_run.log
+汇总CSV: /media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/validation/final_opt/batch_summary.csv

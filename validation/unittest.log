@@ -1,0 +1,24 @@
+test_actual_hardfreeze_list_and_limit_after_rejection (test_crest_mace.WorkflowTests.test_actual_hardfreeze_list_and_limit_after_rejection) ... ok
+test_atom_order_mismatch (test_crest_mace.WorkflowTests.test_atom_order_mismatch) ... ok
+test_checkpoint_resume_and_retry (test_crest_mace.WorkflowTests.test_checkpoint_resume_and_retry) ... ok
+test_cli_preflight (test_crest_mace.WorkflowTests.test_cli_preflight) ... ok
+test_config_invalid_types (test_crest_mace.WorkflowTests.test_config_invalid_types) ... ok
+test_config_normalization (test_crest_mace.WorkflowTests.test_config_normalization) ... ok
+test_deformed_hardfreeze_rejected (test_crest_mace.WorkflowTests.test_deformed_hardfreeze_rejected) ... ok
+test_input_roundtrip (test_crest_mace.WorkflowTests.test_input_roundtrip) ... ok
+test_invalid_checkpoint_payload (test_crest_mace.WorkflowTests.test_invalid_checkpoint_payload) ... ok
+test_invalid_xyz (test_crest_mace.WorkflowTests.test_invalid_xyz) ... ok
+test_manifest_stage1_ignores_unused_model (test_crest_mace.WorkflowTests.test_manifest_stage1_ignores_unused_model) ... ok
+test_no_eligible_conformers (test_crest_mace.WorkflowTests.test_no_eligible_conformers) ... ok
+test_nonfinite_gfnff_rejected (test_crest_mace.WorkflowTests.test_nonfinite_gfnff_rejected) ... ok
+test_rigid_rotation_preserves_geometry (test_crest_mace.WorkflowTests.test_rigid_rotation_preserves_geometry) ... ok
+test_stage1_sort_freeze_and_resume (test_crest_mace.WorkflowTests.test_stage1_sort_freeze_and_resume) ... ok
+test_stage2_partial_failure (test_crest_mace.WorkflowTests.test_stage2_partial_failure) ... ok
+test_stage2_sort_window_initial_and_partial_failure (test_crest_mace.WorkflowTests.test_stage2_sort_window_initial_and_partial_failure) ... ok
+test_worker_crash_detected (test_crest_mace.WorkflowTests.test_worker_crash_detected) ... ok
+test_worker_sp_and_constrained_fire (test_crest_mace.WorkflowTests.test_worker_sp_and_constrained_fire) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 1.467s
+
+OK

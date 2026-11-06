@@ -1,0 +1,10 @@
+input = "struc.xyz"
+runtype = "imtd-gc"
+threads = 4
+constraints = "constraints.inp"
+[calculation]
+freeze = "1,2,3,5"
+[[calculation.level]]
+method = "gfnff"
+chrg = 0
+uhf = 0

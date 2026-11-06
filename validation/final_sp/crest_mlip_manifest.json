@@ -1,0 +1,64 @@
+{
+  "config": {
+    "input": "/media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/input",
+    "output": "/media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/batch_crest/validation/final_sp",
+    "threads": 4,
+    "workers": 1,
+    "chrg": 0,
+    "uhf": 0,
+    "freeze": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "cmetal": 0,
+    "notopo": null,
+    "hardfreeze": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "quick": "--mquick",
+    "crest_mdlen": "1",
+    "fc_pos": 10.0,
+    "hardfreeze_tol_A": 0.05,
+    "stage1_only": false,
+    "resume": true,
+    "cleanup": false,
+    "dry_run": false,
+    "full_log": true,
+    "hb": 0,
+    "mlip": {
+      "enable_cueq": false,
+      "gpu_ids": [
+        0,
+        1
+      ],
+      "include_initial_ts": true,
+      "max_conformers": 3,
+      "mode": "sp",
+      "model": "/media/user/c2e2c3e0-ed85-4f26-99df-765fc1312f8f1/tangkun/Negishi/model/MACE-omol-0-extra-large-1024.model",
+      "fmax": 0.04,
+      "maxsteps": 600,
+      "ewin_kcal_mol": 6.0,
+      "spin": 1,
+      "freeze_0based": [
+        0,
+        1,
+        2,
+        4
+      ],
+      "hardfreeze_tol_A": 0.05,
+      "stage1_only": false
+    },
+    "stage1_workers": 1,
+    "freeze_by_structure": {}
+  },
+  "script_sha256": "35ef97f9bc1f78695e36410ba628ab12a6d4bf0a9502c1b91cdde6168467f36b",
+  "model_sha256": "9b64b4fd5153ca578c694abc57806d8111050de6ff652e695c9b525bc4d36469",
+  "inputs_sha256": {
+    "iso_321.xyz": "a85febe9fd7ffb71af367e7121c1108e6d360496ad2990a31e16207178479972"
+  }
+}
